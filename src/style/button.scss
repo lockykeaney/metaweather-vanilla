@@ -1,0 +1,19 @@
+.button {
+  padding: 15px 20px;
+  display: flex;
+  justify-content: center;
+  align-self: center;
+  font-size: 16px;
+  cursor: pointer;
+
+  &._primary {
+    border: 1px solid $primary-blue;
+    border-radius: 4px;
+    color: $primary-blue;
+  }
+  &._secondary {
+    border: 1px solid $secondary-red;
+    border-radius: 4px;
+    color: $secondary-red;
+  }
+}
