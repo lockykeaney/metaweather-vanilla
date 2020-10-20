@@ -1,13 +1,24 @@
-console.log("hello world!");
-
 import buttonModule from './buttonModule';
-import getLocation from './getLocation';
+import getLocation, { Coords } from './getLocation';
+import {fetchWoeid, fetchWeatherWithId, fetchWeatherBySearch } from './metaweather';
 
-
+const positionWeather = async (): Promise<any> => {
+  try {
+    const x = await fetchWeatherBySearch('melbourne')
+    console.log(x);
+    const res =  await getLocation();
+    const woeid = await fetchWoeid(res)
+    const weather = await fetchWeatherWithId(woeid);
+    
+    
+    return weather
+  } catch (err) {
+    throw err
+  }
+}
 
 const app: any = () => {
-  const coords = getLocation()
-  console.log(coords);
+  positionWeather()
 };
 
 if (

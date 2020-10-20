@@ -1,20 +1,26 @@
-type Coords = {
+export type Coords = {
     latitude: number;
     longitude: number;
 }
-const getLocation = (): any => {
-    console.log('getLocation running');
-    const success = (position: Position): Coords => {
-        const { latitude, longitude } = position.coords        
+
+const getLocation = async (): Promise<Coords> => {
+    const getPosition = (): Promise<Position>  => {
+        return new Promise((resolve, reject) => 
+            navigator.geolocation.getCurrentPosition(resolve, reject)
+        );
+    }
+    
+    try {
+        const pos = await getPosition()
+        const { latitude, longitude } = pos.coords      
         return {
-            latitude, longitude
+            latitude,
+            longitude 
         }
-    }
-    const error = (err: PositionError) => {
-        return err
-    }
-    navigator.geolocation.getCurrentPosition(success, error)
-    
-    
+    } catch (err) {
+        throw console.error(err.message)
+    }    
 }
+
+
 export default getLocation
