@@ -1,16 +1,16 @@
 import buttonModule from './buttonModule';
 import getLocation, { Coords } from './getLocation';
-import {fetchWoeid, fetchWeatherWithId, fetchWeatherBySearch } from './metaweather';
+import { fetchWeatherCoordinates } from './openWeatherMap';
+import { CurrentWeather } from './components';
 
 const positionWeather = async (): Promise<any> => {
   try {
-    const x = await fetchWeatherBySearch('melbourne')
-    console.log(x);
-    const res =  await getLocation();
-    const woeid = await fetchWoeid(res)
-    const weather = await fetchWeatherWithId(woeid);
-    
-    
+    const coordsRes =  await getLocation();
+    const coords = {
+      lat: coordsRes.latitude,
+      lon: coordsRes.longitude
+    }
+    const weather = await fetchWeatherCoordinates(coords)
     return weather
   } catch (err) {
     throw err
@@ -18,7 +18,8 @@ const positionWeather = async (): Promise<any> => {
 }
 
 const app: any = () => {
-  positionWeather()
+  const weather = positionWeather()
+  CurrentWeather(weather)
 };
 
 if (
