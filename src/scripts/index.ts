@@ -29,6 +29,7 @@ const currentTempAtLocation = async () => {
   The entry function the sets up and creates the application, then get is mounted
   to the DOM
 */
+
 const main: any = async () => {
   ContentWrapper();
   const x = await currentTempAtLocation();
