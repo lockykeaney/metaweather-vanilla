@@ -1,41 +1,16 @@
-import getLocation from "./getLocation";
-import { fetchWeatherCoordinates } from "./openWeatherMap";
 import { CurrentWeather, ContentWrapper } from "./components";
 
-const positionWeather = async (): Promise<any> => {
-  try {
-    const coordsRes = await getLocation();
-    const coords = {
-      lat: coordsRes.latitude,
-      lon: coordsRes.longitude,
-    };
-    const weather = await fetchWeatherCoordinates(coords);
-
-    return weather;
-  } catch (err) {
-    throw err;
-  }
-};
-
-const currentTempAtLocation = async () => {
-  try {
-    return await positionWeather();
-  } catch (err) {
-    console.log(err);
-  }
-};
-
 /* 
-  The entry function the sets up and creates the application, then get is mounted
-  to the DOM
+  main() is an entry function the sets up and creates the application, then get is mounted
+  to the DOM. If it can't run, then the app will not run.
 */
-
 const main: any = async () => {
   ContentWrapper();
-  const x = await currentTempAtLocation();
-  const current = await CurrentWeather(x);
+  const current = CurrentWeather();
   const content = document.getElementById("content-wrapper");
-  content?.appendChild(current);
+  if (current) {
+    content?.appendChild(current);
+  }
 };
 
 if (
