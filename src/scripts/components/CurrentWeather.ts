@@ -1,8 +1,12 @@
 const CurrentWeather = (weather: any) => {
-    const appElement: HTMLElement | null = document.getElementById('app');
-    if (appElement) {
-        appElement.innerHTML = 'CurrentWeather'
-    }
-}
+  const { main } = weather;
+  const element = document.createElement("div");
+  const heading = document.createElement("h2");
+  heading.innerHTML = "Current Temp";
+  element.appendChild(heading);
+  const temp = document.createTextNode(main.temp);
+  element.appendChild(temp);
+  return element;
+};
 
-export default CurrentWeather
+export default CurrentWeather;
