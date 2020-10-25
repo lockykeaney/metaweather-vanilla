@@ -1,19 +1,8 @@
+import store from "../store";
 import getLocation from "../getLocation";
 import { fetchWeatherCoordinates } from "../openWeatherMap";
 
-// const setData =  (obj: any) => {
-// 	for (var key in obj) {
-// 		if (obj.hasOwnProperty(key)) {
-// 			data[key] = obj[key];
-// 		}
-// 	}
-// };
-
 const CurrentWeather = (): HTMLElement | null => {
-  let data = {
-    isLoading: true,
-    weather: {},
-  };
   const positionWeather = async (): Promise<any> => {
     try {
       const coordsRes = await getLocation();
@@ -23,7 +12,9 @@ const CurrentWeather = (): HTMLElement | null => {
       };
       const res = await fetchWeatherCoordinates(coords);
       console.log(res);
-      data.weather = res;
+      // data.weather = res;
+      store.dispatch("setWeatherData", res);
+      store.dispatch("setIsLoading", null);
     } catch (err) {
       throw err;
     }
@@ -43,12 +34,12 @@ const CurrentWeather = (): HTMLElement | null => {
 
   //   return component(data);
 
-  if (data.isLoading) {
+  if (store.state.isLoading) {
     const p = document.createElement("p");
     p.innerText = "Loading";
     return p;
   } else {
-    return component(data);
+    return component(store.state.weatherData);
   }
 };
 
