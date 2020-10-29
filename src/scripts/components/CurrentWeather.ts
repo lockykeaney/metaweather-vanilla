@@ -3,6 +3,7 @@ import getLocation from "../getLocation";
 import { fetchWeatherCoordinates } from "../openWeatherMap";
 
 const CurrentWeather = (): HTMLElement | null => {
+  console.log(store);
   const positionWeather = async (): Promise<any> => {
     try {
       const coordsRes = await getLocation();
@@ -11,18 +12,22 @@ const CurrentWeather = (): HTMLElement | null => {
         lon: coordsRes.longitude,
       };
       const res = await fetchWeatherCoordinates(coords);
-      console.log(res);
-      // data.weather = res;
       store.dispatch("setWeatherData", res);
-      store.dispatch("setIsLoading", null);
+      store.dispatch("setIsLoading", false);
     } catch (err) {
       throw err;
     }
   };
   positionWeather();
 
-  const component = (weather: any) => {
-    const { main, name } = weather;
+  const componentRender = (state: any) => {
+    if (state.isLoading) {
+      const p = document.createElement("p");
+      p.innerText = "Loading";
+      return p;
+    }
+
+    const { main, name } = store.state.weather;
     const element = document.createElement("div");
     const heading = document.createElement("h2");
     heading.innerHTML = `Current temp in ${name}`;
@@ -31,16 +36,11 @@ const CurrentWeather = (): HTMLElement | null => {
     element.appendChild(temp);
     return element;
   };
-
-  //   return component(data);
-
-  if (store.state.isLoading) {
-    const p = document.createElement("p");
-    p.innerText = "Loading";
-    return p;
-  } else {
-    return component(store.state.weatherData);
-  }
+  let component: any = componentRender(store.state);
+  store.events.subscribe("stateChange", () => {
+    component = componentRender(store.state);
+  });
+  return component;
 };
 
 export default CurrentWeather;

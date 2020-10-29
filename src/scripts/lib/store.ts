@@ -9,9 +9,11 @@ export default class Store {
 
   constructor(params: any) {
     let self = this;
+
     self.actions = {};
     self.mutations = {};
     self.state = {};
+
     self.status = "resting";
     self.events = new PubSub();
 
@@ -26,10 +28,13 @@ export default class Store {
       set: (state: any, key: string, value: any) => {
         state[key] = value;
         self.events.publish("stateChange", self.state);
+        console.log("self state", self);
+
         if (self.status !== "mutation") {
           console.warn(`You should use a mutation to set ${key}`);
         }
         self.status = "resting";
+
         return true;
       },
     });
@@ -41,16 +46,21 @@ export default class Store {
     if (typeof self.actions[key] !== "function") {
       return false;
     }
+
     self.status = "action";
     self.actions[key](self, payload);
     return true;
   }
 
   commit(key: string, payload: any) {
+    console.log("commiting");
     let self = this;
-    if (typeof self.actions[key] !== "function") {
+    console.log("comminting self", self);
+
+    if (typeof self.mutations[key] !== "function") {
       return false;
     }
+
     self.status = "mutation";
     let newState = self.mutations[key](self.state, payload);
     self.state = Object.assign(self.state, newState);
