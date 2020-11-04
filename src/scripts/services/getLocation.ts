@@ -3,7 +3,7 @@ export type Coords = {
     longitude: number;
 }
 
-const getLocation = async (): Promise<Coords> => {
+export const getLocation = async (): Promise<Coords> => {
     const getPosition = (): Promise<Position>  => {
         return new Promise((resolve, reject) => 
             navigator.geolocation.getCurrentPosition(resolve, reject)
@@ -23,4 +23,3 @@ const getLocation = async (): Promise<Coords> => {
 }
 
 
-export default getLocation

@@ -1,4 +1,4 @@
-import PubSub from "./pubsub";
+import PubSub from "./PubSub";
 
 export default class Store {
   actions: any;
@@ -28,7 +28,6 @@ export default class Store {
       set: (state: any, key: string, value: any) => {
         state[key] = value;
         self.events.publish("stateChange", self.state);
-        console.log("self state", self);
 
         if (self.status !== "mutation") {
           console.warn(`You should use a mutation to set ${key}`);
@@ -53,9 +52,7 @@ export default class Store {
   }
 
   commit(key: string, payload: any) {
-    console.log("commiting");
     let self = this;
-    console.log("comminting self", self);
 
     if (typeof self.mutations[key] !== "function") {
       return false;

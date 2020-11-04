@@ -1,6 +1,5 @@
 import store from "../store";
-import getLocation from "../getLocation";
-import { fetchWeatherCoordinates } from "../openWeatherMap";
+import { fetchWeatherCoordinates, getLocation } from "../services";
 
 const CurrentWeather = (): HTMLElement | null => {
   console.log(store);

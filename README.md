@@ -7,3 +7,5 @@ Includes sass and TailwindCSS for quick and easy style & layouts
 `npm install -g parcel` or `yarn add -g parcel`
 
 `npm install` or `yarn install`
+
+OpenWeatherAPI https://openweathermap.org/api
