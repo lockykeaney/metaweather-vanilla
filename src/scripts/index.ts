@@ -7,6 +7,8 @@ import { fetchWeatherCoordinates, getLocation } from "./services";
 */
 
 const template = (props: any) => {
+  console.log(props);
+
   return `
       <div>
         <h2>The Current temp in ${props.name}</h2>
@@ -33,15 +35,12 @@ const main: any = async () => {
 
   const app = document.getElementById("app");
   if (app) {
-    const weather = positionWeather();
+    positionWeather();
     store.events.subscribe("stateChange", () => {
-      console.log("ssss");
-
       if (store.state.isLoading) {
         app.innerHTML = `<h1>Loading...</h1>`;
       } else {
-        console.log(weather);
-        app.innerHTML = template(weather);
+        app.innerHTML = template(store.state.weatherData);
       }
     });
   }
