@@ -1,8 +1,7 @@
 import store from "../store";
 import { fetchWeatherCoordinates, getLocation } from "../services";
 
-const CurrentWeather = (): HTMLElement | null => {
-  console.log(store);
+const CurrentWeather = (): any => {
   const positionWeather = async (): Promise<any> => {
     try {
       const coordsRes = await getLocation();
@@ -17,29 +16,19 @@ const CurrentWeather = (): HTMLElement | null => {
       throw err;
     }
   };
-  positionWeather();
 
-  const componentRender = (state: any) => {
-    if (state.isLoading) {
-      const p = document.createElement("p");
-      p.innerText = "Loading";
-      return p;
-    }
+  const { isLoading, weatherData } = store.state;
 
-    const { main, name } = store.state.weather;
-    const element = document.createElement("div");
-    const heading = document.createElement("h2");
-    heading.innerHTML = `Current temp in ${name}`;
-    element.appendChild(heading);
-    const temp = document.createTextNode(main.temp);
-    element.appendChild(temp);
-    return element;
-  };
-  let component: any = componentRender(store.state);
-  store.events.subscribe("stateChange", () => {
-    component = componentRender(store.state);
-  });
-  return component;
+  if (isLoading) {
+    positionWeather();
+    return `<h1>Loading...</h1>`;
+  }
+  return `
+    <div>
+      <h2>The Current temp in ${weatherData.name}</h2>
+      <p>${weatherData.main.temp}</p>
+    </div>
+  `;
 };
 
 export default CurrentWeather;
