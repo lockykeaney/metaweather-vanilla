@@ -27,10 +27,8 @@ export default class Store {
     self.state = new Proxy(params.state || {}, {
       set: (state: any, key: string, value: any) => {
         state[key] = value;
-        // console.log(`key: ${key}, value: ${value}`);
 
         self.events.publish("stateChange", self.state);
-        console.log(self.status);
 
         if (self.status !== "mutation") {
           console.warn(`You should use a mutation to set ${key}`);
