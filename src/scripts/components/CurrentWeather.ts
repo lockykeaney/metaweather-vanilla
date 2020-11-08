@@ -17,18 +17,29 @@ const CurrentWeather = (): any => {
     }
   };
 
-  const { isLoading, weatherData } = store.state;
+  // const { isLoading, weatherData } = store.state;
 
-  if (isLoading) {
-    positionWeather();
-    return `<h1>Loading...</h1>`;
-  }
-  return `
-    <div>
-      <h2>The Current temp in ${weatherData.name}</h2>
-      <p>${weatherData.main.temp}</p>
-    </div>
-  `;
+  // const render = () => {
+  //   if (isLoading) {
+  //     positionWeather();
+  //     return `<h1>Loading...</h1>`;
+  //   }
+  //   return `
+  //     <div>
+  //       <h2>The Current temp in ${weatherData.name}</h2>
+  //       <p>${weatherData.main.temp}</p>
+  //     </div>
+  //   `;
+  // };
+  // render();
 };
 
+export const template = (props: any) => {
+  return `
+      <div>
+        <h2>The Current temp in ${props.name}</h2>
+        <p>${props.main.temp}</p>
+      </div>
+    `;
+};
 export default CurrentWeather;

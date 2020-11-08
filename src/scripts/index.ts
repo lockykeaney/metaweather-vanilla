@@ -1,32 +1,50 @@
-import { ContentWrapper, CurrentWeather } from "./components";
 import store from "./store";
+import { fetchWeatherCoordinates, getLocation } from "./services";
 
 /* 
   main() is an entry function the sets up and creates the application, then get is mounted
   to the DOM. If it can't run, then the app will not run.
 */
 
+const template = (props: any) => {
+  return `
+      <div>
+        <h2>The Current temp in ${props.name}</h2>
+        <p>${props.main.temp}</p>
+      </div>
+    `;
+};
+
 const main: any = async () => {
-  ContentWrapper();
-  const content = document.getElementById("content-wrapper");
-  const count = document.createElement("div");
+  const positionWeather = async (): Promise<any> => {
+    try {
+      const coordsRes = await getLocation();
+      const coords = {
+        lat: coordsRes.latitude,
+        lon: coordsRes.longitude,
+      };
+      const res = await fetchWeatherCoordinates(coords);
+      store.dispatch("setWeatherData", res);
+      store.dispatch("setIsLoading", false);
+    } catch (err) {
+      throw err;
+    }
+  };
 
-  if (content) {
-    count.innerHTML = CurrentWeather();
-    content.appendChild(count);
-
+  const app = document.getElementById("app");
+  if (app) {
+    const weather = positionWeather();
     store.events.subscribe("stateChange", () => {
-      // count.innerHTML = CurrentWeather();
-      content.appendChild(count);
+      console.log("ssss");
+
+      if (store.state.isLoading) {
+        app.innerHTML = `<h1>Loading...</h1>`;
+      } else {
+        console.log(weather);
+        app.innerHTML = template(weather);
+      }
     });
   }
 };
 
-if (
-  document.readyState === "complete" ||
-  (document.readyState !== "loading" && !document.documentElement.scroll)
-) {
-  main();
-} else {
-  document.addEventListener("DOMContentLoaded", main);
-}
+document.addEventListener("DOMContentLoaded", main);

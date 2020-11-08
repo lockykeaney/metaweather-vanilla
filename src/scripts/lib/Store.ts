@@ -1,4 +1,4 @@
-import PubSub from "./PubSub";
+import PubSub, { FunctionalPubSub } from "./PubSub";
 
 export default class Store {
   actions: any;
@@ -27,6 +27,8 @@ export default class Store {
     self.state = new Proxy(params.state || {}, {
       set: (state: any, key: string, value: any) => {
         state[key] = value;
+        // console.log(`key: ${key}, value: ${value}`);
+
         self.events.publish("stateChange", self.state);
 
         if (self.status !== "mutation") {
@@ -64,3 +66,5 @@ export default class Store {
     return true;
   }
 }
+
+export const FunctionalStore = () => {};
